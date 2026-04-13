@@ -10,6 +10,7 @@ import {
 import { IncrementalASTParser } from '@/views/Arrange/canvasManager'
 import { setSourceValue } from '@/views/Arrange/canvasManager/adapters/VisualEditor/NodeParameter'
 import { varHtmlToStr } from '@/views/Arrange/utils'
+import { useProcessSelectOptions } from '../hooks/useProcessSelectOptions'
 
 import { getValue } from './atomDescUtils'
 
@@ -23,10 +24,11 @@ type ResultSegment = string | {
 // 获取表单值的显示文本
 const getFormItemDisplayValue = (item: RPA.AtomDisplayItem): string => {
   const rawValue = item.value === '""' ? '' : item.value
+  const options = useProcessSelectOptions(item) ?? item.options
 
   // 处理选项类型：从 options 中查找对应的 label
-  if (item.options && rawValue) {
-    const matchedOption = item.options.find(opt => opt.value === rawValue)
+  if (options && rawValue) {
+    const matchedOption = options.find(opt => opt.value === rawValue)
     return matchedOption ? i18next.translate(matchedOption.label) : String(rawValue ?? '')
   }
   // 处理数组类型：提取数组中的 value 并拼接
