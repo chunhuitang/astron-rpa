@@ -40,24 +40,27 @@ const getFormItemDisplayValue = (item: RPA.AtomDisplayItem): string => {
 }
 
 // 渲染原子能力的备注
-export function renderAtomRemark(item: RPA.Atom, astParser: IncrementalASTParser) {
+export function renderAtomRemark(item: RPA.Atom, astParser?: IncrementalASTParser) {
   const { key, isOpen = true, id, inputList, outputList, advanced } = item
   if (!id) {
     return
   }
+
+  const title = i18next.translate(item.alias)
 
   if (key === ATOM_KEY_MAP.GroupEnd || (key === ATOM_KEY_MAP.Group && isOpen)) {
     return
   }
 
   if (key === ATOM_KEY_MAP.Group) {
+    if (!astParser) {
+      return title
+    }
     const node = astParser.getNode(id)
     const childrenLength = node.children.length - 1
     return `共${childrenLength}条指令`
   }
-
   const desc = i18next.translate(item.comment)
-  const title = i18next.translate(item.alias)
 
   if (!desc)
     return title
