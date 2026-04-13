@@ -13,7 +13,6 @@ import ContextMenu from './ContextMunus.vue'
 import DraggableVirtualScroller from './DraggableVirtualScroller.vue'
 import { draggableAddStyle } from './hooks/useFlow'
 import { useRenderListProvide } from './hooks/useRenderList'
-import { useRunDebug } from './hooks/useRunDebug'
 import { useFlowStateProvide } from './hooks'
 import Item from './Item.vue'
 import { VisualEditor } from '../../canvasManager'
@@ -56,8 +55,6 @@ bus.on((idOrIndex) => {
 
   draggableRef.value.scrollTo(idOrIndex)
 })
-
-useRunDebug()
 
 function handleDraggableAddStyle() {
   draggableAddStyle(flowManager)
