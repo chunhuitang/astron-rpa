@@ -23,13 +23,13 @@ class NodeParameter implements RPA.Process.NodeParameter {
   public formTabs = ref<RPA.Process.AtomTabs[]>([])
 
   get activeAtom() {
-    if (!this.activeInstance || !this.activeAtomId.value) return null
+    if (!this.activeAtomId.value || !this.activeInstance) return null
 
     return this.activeInstance.state.data.find(it => it.id === this.activeAtomId.value) || null
   }
 
   get activeAtomIndex() {
-    if (!this.activeInstance || !this.activeAtomId.value) return null
+    if (!this.activeAtomId.value || !this.activeInstance) return null
 
     return this.activeInstance.state.data.findIndex(it => it.id === this.activeAtomId.value) || null
   }
