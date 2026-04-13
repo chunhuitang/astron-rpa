@@ -59,19 +59,24 @@ export function renderAtomRemark(item: RPA.Atom, astParser: IncrementalASTParser
   if (!desc)
     return title
 
-  // 收集所有表单项（inputList、outputList、advancedItems）
-  const allFormItems = [
-    ...(inputList || []),
-    ...(outputList || []),
-    ...(advanced || []),
+  const formItemsObj: Record<string, RPA.AtomDisplayItem> = {}
+  const formItemGroups: Array<[string, RPA.AtomDisplayItem[]]> = [
+    ['inputList', inputList || []],
+    ['outputList', outputList || []],
+    ['advanced', advanced || []],
   ]
 
-  // 构建表单项映射对象，便于快速查找
-  const formItemsObj: Record<string, RPA.AtomDisplayItem> = {}
-  allFormItems.forEach((item) => {
-    if (item?.key) {
-      formItemsObj[item.key] = item
-    }
+  formItemGroups.forEach(([prefix, formItems]) => {
+    formItems.forEach((formItem, index) => {
+      if (!formItem?.key) {
+        return
+      }
+
+      formItemsObj[formItem.key] = {
+        ...formItem,
+        sourceValue: formItem.sourceValue ?? `${prefix}[${index}].value`,
+      }
+    })
   })
 
   // 根据条件选择有效的 key（支持 || 分隔的多个 key）
