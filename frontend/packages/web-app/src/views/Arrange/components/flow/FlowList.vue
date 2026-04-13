@@ -46,6 +46,14 @@ useScroll(flowManager.containerRef, {
 
 const bus = useEventBus(atomScrollIntoViewKey)
 bus.on((idOrIndex) => {
+  if (processStore.canvasManager.activeTab?.id !== props.manage.id) {
+    return
+  }
+
+  if (typeof idOrIndex === 'string' && !props.manage.state.data?.some(item => item.id === idOrIndex)) {
+    return
+  }
+
   draggableRef.value.scrollTo(idOrIndex)
 })
 
