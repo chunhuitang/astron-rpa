@@ -8,6 +8,7 @@ import {
   defaultValueText,
 } from '@/views/Arrange/config/flow'
 import { IncrementalASTParser } from '@/views/Arrange/canvasManager'
+import { setSourceValue } from '@/views/Arrange/canvasManager/adapters/VisualEditor/NodeParameter'
 import { varHtmlToStr } from '@/views/Arrange/utils'
 
 import { getValue } from './atomDescUtils'
@@ -61,21 +62,18 @@ export function renderAtomRemark(item: RPA.Atom, astParser: IncrementalASTParser
 
   const formItemsObj: Record<string, RPA.AtomDisplayItem> = {}
   const formItemGroups: Array<[string, RPA.AtomDisplayItem[]]> = [
-    ['inputList', inputList || []],
-    ['outputList', outputList || []],
-    ['advanced', advanced || []],
+    ['inputList', setSourceValue(inputList || [], 'inputList')],
+    ['outputList', setSourceValue(outputList || [], 'outputList')],
+    ['advanced', setSourceValue(advanced || [], 'advanced')],
   ]
 
-  formItemGroups.forEach(([prefix, formItems]) => {
-    formItems.forEach((formItem, index) => {
+  formItemGroups.forEach(([, formItems]) => {
+    formItems.forEach((formItem) => {
       if (!formItem?.key) {
         return
       }
 
-      formItemsObj[formItem.key] = {
-        ...formItem,
-        sourceValue: formItem.sourceValue ?? `${prefix}[${index}].value`,
-      }
+      formItemsObj[formItem.key] = formItem
     })
   })
 

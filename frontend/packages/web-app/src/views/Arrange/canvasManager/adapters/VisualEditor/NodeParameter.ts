@@ -6,6 +6,13 @@ import { BASE_FORM } from '@/views/Arrange/config/atom'
 
 import type { VisualEditor } from '.'
 
+export function setSourceValue(formItems: RPA.AtomDisplayItem[], prefix: string): RPA.AtomDisplayItem[] {
+  return formItems.map((item, index) => ({
+    ...item,
+    sourceValue: `${prefix}[${index}].value`,
+  }))
+}
+
 class NodeParameter implements RPA.Process.NodeParameter {
   /** 当前激活的原子能力ID */
   public activeAtomId = ref<string>()
@@ -160,14 +167,6 @@ class NodeParameter implements RPA.Process.NodeParameter {
 
     const { inputList = [], outputList = [], advanced = [], exception = [] } = atom
 
-    // 给表单项添加 sourceValue
-    const setSourceValue = (formItems: RPA.AtomDisplayItem[], prefix: string) => {
-      return formItems.map((item, index) => ({
-        ...item,
-        sourceValue: `${prefix}[${index}].value`,
-      }))
-    }
-    
     // 基本参数表单配置
     const baseParam: RPA.Process.AtomTabs = {
       key: 'baseParam',
